@@ -1,0 +1,470 @@
+{
+  "name": "Real Estate Photo → Instagram Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1Cc1XIBxJMGDpjyao6FnqJ8juskzGQGXi",
+          "mode": "id"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "name": "Google Drive Trigger",
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        128
+      ],
+      "id": "4913b4ce-e7b9-4461-82dc-3e2125ef66cf",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "P9q32HM2eTWXlcmH",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "name": "Download Photo",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        432,
+        128
+      ],
+      "id": "7541e3df-ed2e-43b0-a318-26bd786ef6a2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "P9q32HM2eTWXlcmH",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a real estate marketing expert and Instagram content creator.\n\nYou have been given a property photo. Your tasks:\n1. Analyze the photo and describe what you see (room type, style, key features, lighting, mood)\n2. Write a compelling Instagram caption (150-200 words) that:\n - Highlights the property's best features\n - Uses real estate marketing language\n - Includes relevant emojis\n - Ends with a call-to-action (e.g., 'DM us for a viewing!')\n - Suggests 15-20 relevant hashtags\n3. Suggest a Canva design style that matches the image mood (e.g., 'Modern Minimal', 'Luxury Gold', 'Warm Cozy')\n\nImage file name: {{ $json.name }}\nImage MIME type: {{ $json.mimeType }}\n\nReturn a JSON object with these exact keys:\n- imageAnalysis: string (detailed description)\n- instagramCaption: string (full caption with hashtags)\n- canvaStyle: string (design style suggestion)\n- propertyType: string (e.g., 'Living Room', 'Kitchen', 'Exterior', 'Bedroom')\n- keyFeatures: array of strings (top 3-5 features spotted)",
+        "options": {}
+      },
+      "name": "AI Photo Analyzer",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        672,
+        128
+      ],
+      "id": "681b6477-dc60-45c9-b1d9-5abb63b62f72",
+      "typeVersion": 3.1
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Lấy output từ AI Agent (node ngay phía trước)\nconst inputData = $input.first().json;\nconst rawOutput = inputData.output || inputData.text || '';\n\nlet parsed;\ntry {\n  // Trích xuất JSON từ phản hồi của AI\n  const jsonMatch = rawOutput.match(/\\{[\\s\\S]*\\}/);\n  parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : null;\n} catch (e) {\n  parsed = null;\n}\n\n// 2. Dự phòng nếu AI \"ngáo\" không trả JSON\nif (!parsed) {\n  parsed = {\n    imageAnalysis: rawOutput || \"Không thể phân tích\",\n    instagramCaption: \"Mẫu nhà đẹp tại BASE Automation! Liên hệ ngay.\",\n    propertyType: \"Bất động sản\",\n    keyFeatures: []\n  };\n}\n\n// 3. Lấy thông tin file từ node Download Photo \n// LƯU Ý: Bạn phải đảm bảo tên node trong ngoặc đơn khớp 100% với tên trên canvas\nconst fileInfo = $('Download Photo').first().json;\n\nreturn [{\n  json: {\n    ...parsed,\n    fileId: fileInfo.id,\n    fileName: fileInfo.name,\n    fileWebViewLink: fileInfo.webViewLink || '',\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "name": "Parse AI Output",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        976,
+        128
+      ],
+      "id": "291880a8-1fda-4df0-97e5-4f396cb259c1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Store the Canva job ID and all context for the approval step\nconst canvaResponse = $input.first().json;\nconst prevData = $('Parse AI Output').first().json;\n\nreturn [{\n json: {\n canvaJobId: canvaResponse.job?.id || canvaResponse.id || 'pending',\n canvaStatus: canvaResponse.job?.status || canvaResponse.status || 'submitted',\n instagramCaption: prevData.instagramCaption,\n imageAnalysis: prevData.imageAnalysis,\n propertyType: prevData.propertyType,\n keyFeatures: prevData.keyFeatures,\n canvaStyle: prevData.canvaStyle,\n fileName: prevData.fileName,\n fileId: prevData.fileId,\n fileWebViewLink: prevData.fileWebViewLink,\n timestamp: prevData.timestamp,\n executionId: $execution.id,\n approvalId: `approval_${Date.now()}`\n }\n}];"
+      },
+      "name": "Prepare Approval Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        128
+      ],
+      "id": "5e44cd19-f83f-4462-a68b-e1d3ee5283c3"
+    },
+    {
+      "parameters": {
+        "chatId": "7259103504",
+        "text": "=*noti*\n\nProperty Type: {{ $json.propertyType }}\nBrand Style: {{ $json.canvaStyle }}\n\n*AI Analysis:*\n{{ $json.imageAnalysis }}\n\n*Instagram Caption:*\n{{ $json.instagramCaption }}\n\n*Key Features:*\n{{ $json.keyFeatures.join('\\n• ') }}\n\n[View Original Photo]({{ $json.fileWebViewLink }})\n\n*Approval ID:* {{ $json.approvalId }}\n{{  $json.executionId }}\nPlease approve or reject this post:",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Approve",
+                    "additionalFields": {
+                      "callback_data": "=approve:{{ $json.approvalId }}:{{ $json.executionId }}"
+                    }
+                  },
+                  {
+                    "text": "Reject",
+                    "additionalFields": {
+                      "callback_data": "=reject:{{ $json.approvalId }}:{{ $json.executionId }}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "name": "Send to Manager Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1376,
+        128
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "id": "f18001b2-f7f4-4f3e-b082-1a1cd6ff7cd3",
+      "webhookId": "7086a764-d4d5-412d-9964-98d0c987f92c",
+      "credentials": {
+        "telegramApi": {
+          "id": "GrYA6wY7hE6jbLuv",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "options": {
+          "webhookSuffix": "{{ $json.approvalId }}"
+        }
+      },
+      "name": "Wait for Approval",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1600,
+        128
+      ],
+      "id": "105ea7f2-a650-46ad-a132-9af37caeee3f",
+      "webhookId": "37f78651-78b5-44b5-9a10-5bc04f1e86fd"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "approval-check",
+              "leftValue": "={{ $json.body?.callback_data || $json.query?.action || '' }}",
+              "rightValue": "approve",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Approved or Rejected?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1808,
+        128
+      ],
+      "id": "54330cac-e493-44b8-9aee-203ae53d3196"
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_MANAGER_TELEGRAM_CHAT_ID",
+        "text": "=✅ *Post Published Successfully!*\n\n🏠 {{ $('Prepare Approval Data').first().json.propertyType }} photo is now live on Instagram!\n📅 Published at: {{ new Date().toLocaleString() }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "name": "Notify Published",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1984,
+        48
+      ],
+      "id": "38d293f6-3e76-4cb1-a6b6-d6ffe8863efb",
+      "webhookId": "56c16eb8-82c7-45b6-a4d8-fb0b9ea8f6a0",
+      "credentials": {
+        "telegramApi": {
+          "id": "GrYA6wY7hE6jbLuv",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_MANAGER_TELEGRAM_CHAT_ID",
+        "text": "=❌ *Post Rejected*\n\n🏠 {{ $('Prepare Approval Data').first().json.propertyType }} photo has been rejected and will not be posted.\n📁 File: {{ $('Prepare Approval Data').first().json.fileName }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "name": "Notify Rejected",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1984,
+        224
+      ],
+      "id": "7bd810c3-c307-41e3-a401-265050369ddd",
+      "webhookId": "271fb2fc-3462-4069-b48f-843f8926abe4",
+      "credentials": {
+        "telegramApi": {
+          "id": "GrYA6wY7hE6jbLuv",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        672,
+        304
+      ],
+      "id": "40414b7c-57cb-4cbc-832b-2c9e6fe7b0da",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "PXtdb9AX1XXBhzBs",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Kiểm tra xem có dữ liệu callback_query không\nif (!$json.callback_query || !$json.callback_query.data) {\n  return {\n    error: \"Không tìm thấy dữ liệu từ nút bấm Telegram. Hãy thử nhấn nút trên điện thoại!\"\n  };\n}\nconst data = $json.callback_query.data;\nconst [action, approvalId, executionId] = data.split(':');\n\nreturn {\n  action,\n  approvalId, // Bây giờ sẽ là \"approval_174...\"\n  executionId,\n  callbackQueryId: $json.callback_query.id\n};"
+      },
+      "id": "1e9ef7d3-aa98-4879-a4f1-14040982186d",
+      "name": "Tách Lệnh & ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        864,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "updates": [
+          "callback_query"
+        ],
+        "additionalFields": {}
+      },
+      "id": "4847e754-3570-4a86-942e-9922253a60a1",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1,
+      "position": [
+        640,
+        608
+      ],
+      "webhookId": "4ae439c7-6a9f-4167-a22d-9b6f156ec6cb",
+      "credentials": {
+        "telegramApi": {
+          "id": "GrYA6wY7hE6jbLuv",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://seethingly-pseudocharitable-elsy.ngrok-free.dev/webhook-waiting/37f78651-78b5-44b5-9a10-5bc04f1e86fd/{{ $json.approvalId }}?action={{ $json.action }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1040,
+        608
+      ],
+      "id": "e8d8717c-3834-4458-88d0-4d9f3166fcbc",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Download Photo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Photo": {
+      "main": [
+        [
+          {
+            "node": "AI Photo Analyzer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Photo Analyzer": {
+      "main": [
+        [
+          {
+            "node": "Parse AI Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse AI Output": {
+      "main": [
+        [
+          {
+            "node": "Prepare Approval Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Approval Data": {
+      "main": [
+        [
+          {
+            "node": "Send to Manager Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send to Manager Telegram": {
+      "main": [
+        [
+          {
+            "node": "Wait for Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Approval": {
+      "main": [
+        [
+          {
+            "node": "Approved or Rejected?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approved or Rejected?": {
+      "main": [
+        [
+          {
+            "node": "Notify Published",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notify Rejected",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Photo Analyzer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tách Lệnh & ID": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Tách Lệnh & ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "0e50e1a4-3655-47f9-9172-c0bd3e8e2418",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4a05115e44b2ec325c19e77ae7702f876a66c0cc1d6ae61a06bfef66d3f29a53"
+  },
+  "id": "EhZPdzBE1wJcrw83",
+  "tags": []
+}

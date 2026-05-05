@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok PhoneFarm | BASE Automation | Nguyen Huy Binh — Automation Solution Engineer</title>
+    <meta name="description"
+        content="BASE Automation — Building intelligent workflow automation, production scheduling DSS, and data pipelines for SMEs. Founded by Nguyen Huy Binh.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --emerald: #10b981;
+            --emerald-dark: #059669;
+            --emerald-glow: rgba(16, 185, 129, 0.15);
+            --bg: #080f0c;
+            --bg2: #0d1a14;
+            --bg3: #111f17;
+            --card: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #e2e8f0;
+            --muted: #64748b;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* ── SCROLLBAR ── */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--emerald-dark);
+            border-radius: 3px;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 0 2rem;
+            background: rgba(8, 15, 12, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            transition: background 0.3s;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-logo img {
+            height: 38px;
+            width: auto;
+        }
+
+        .nav-logo span {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .nav-logo span em {
+            color: var(--emerald);
+            font-style: normal;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .nav-cta {
+            background: var(--emerald);
+            color: #000;
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .nav-cta:hover {
+            background: var(--emerald-dark);
+            transform: translateY(-1px);
+        }
+
+        /* ── HERO ── */
+        #hero {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 100px 2rem 4rem;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 70% 60% at 60% 40%, rgba(16, 185, 129, 0.12) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 40% at 20% 80%, rgba(14, 165, 233, 0.08) 0%, transparent 60%),
+                linear-gradient(180deg, #080f0c 0%, #0d1a14 100%);
+        }
+
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(16, 185, 129, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 860px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--emerald-glow);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--emerald);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .hero-badge span {
+            width: 6px;
+            height: 6px;
+            background: var(--emerald);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1)
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(1.4)
+            }
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--white);
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-content h1 .grad {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: 1.125rem;
+            color: var(--muted);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--emerald);
+            color: #000;
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            background: var(--emerald-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-ghost {
+            background: var(--card);
+            color: var(--white);
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--white);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .stat-num span {
+            color: var(--emerald);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        /* ── SECTIONS ── */
+        section {
+            padding: 6rem 2rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--emerald);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 3vw, 2.5rem);
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .section-sub {
+            color: var(--muted);
+            font-size: 1rem;
+            max-width: 560px;
+            line-height: 1.7;
+        }
+
+        /* ── SERVICES ── */
+        #services {
+            background: var(--bg2);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .service-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .service-card:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            background: rgba(16, 185, 129, 0.06);
+            transform: translateY(-4px);
+        }
+
+        .svc-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--emerald-glow);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--emerald);
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 0.625rem;
+        }
+
+        .service-card p {
+            font-size: 0.875rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* ── PORTFOLIO ── */
+        #portfolio {
+            background: var(--bg);
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            border-color: rgba(16, 185, 129, 0.35);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(16, 185, 129, 0.1);
+        }
+
+        .project-banner {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner-1 {
+            background: linear-gradient(135deg, #0f2d1e 0%, #0d3326 100%);
+        }
+
+        .banner-2 {
+            background: linear-gradient(135deg, #0f1f2d 0%, #0d2633 100%);
+        }
+
+        .banner-3 {
+            background: linear-gradient(135deg, #2d1f0f 0%, #33260d 100%);
+        }
+
+        .banner-4 {
+            background: linear-gradient(135deg, #1f0f2d 0%, #260d33 100%);
+        }
+
+        .project-banner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.015) 0px, rgba(255, 255, 255, 0.015) 1px, transparent 1px, transparent 12px);
+        }
+
+        .project-banner i {
+            position: relative;
+            z-index: 1;
+        }
+
+        .project-body {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .project-year {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .project-type {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--emerald);
+            background: var(--emerald-glow);
+            padding: 3px 10px;
+            border-radius: 50px;
+        }
+
+        .project-body h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.625rem;
+        }
+
+        .project-body p {
+            font-size: 0.875rem;
+            color: var(--muted);
+            line-height: 1.65;
+            flex: 1;
+        }
+
+        .project-highlights {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .highlight {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .highlight i {
+            color: var(--emerald);
+            margin-top: 2px;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 1.25rem;
+        }
+
+        .tag {
+            font-size: 0.72rem;
+            font-weight: 500;
+            padding: 3px 10px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: #94a3b8;
+        }
+
+        /* ── EXPERIENCE ── */
+        #experience {
+            background: var(--bg2);
+        }
+
+        .timeline {
+            margin-top: 3rem;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--emerald) 0%, transparent 100%);
+            border-radius: 2px;
+        }
+
+        .tl-item {
+            position: relative;
+            padding-bottom: 3rem;
+        }
+
+        .tl-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .tl-dot {
+            position: absolute;
+            left: -2.45rem;
+            top: 4px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--emerald);
+            border: 3px solid var(--bg2);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+        }
+
+        .tl-date {
+            font-size: 0.78rem;
+            color: var(--emerald);
+            font-weight: 600;
+            margin-bottom: 0.375rem;
+            letter-spacing: 0.04em;
+        }
+
+        .tl-company {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .tl-role {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.75rem;
+        }
+
+        .tl-desc {
+            font-size: 0.875rem;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        .tl-result {
+            margin-top: 0.875rem;
+            padding: 0.75rem 1rem;
+            background: var(--emerald-glow);
+            border-left: 3px solid var(--emerald);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.8rem;
+            color: #a7f3d0;
+        }
+
+        .tl-result strong {
+            color: var(--emerald);
+        }
+
+        /* ── SKILLS ── */
+        #skills {
+            background: var(--bg);
+        }
+
+        .skills-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .skill-group h4 {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--emerald);
+            margin-bottom: 1rem;
+        }
+
+        .skill-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: #cbd5e1;
+            transition: all 0.2s;
+        }
+
+        .pill:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            color: var(--white);
+            background: rgba(16, 185, 129, 0.08);
+        }
+
+        .pill i {
+            color: var(--emerald);
+            font-size: 0.75rem;
+        }
+
+        /* ── CONTACT ── */
+        #contact {
+            background: var(--bg2);
+            text-align: center;
+        }
+
+        .contact-card {
+            max-width: 640px;
+            margin: 2.5rem auto 0;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .contact-link:hover {
+            border-color: var(--emerald);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .contact-link i {
+            color: var(--emerald);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        /* ── FADE IN ── */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media(max-width:768px) {
+            nav {
+                padding: 0 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+            }
+
+            .stat-num {
+                font-size: 1.5rem;
+            }
+
+            section {
+                padding: 4rem 1.25rem;
+            }
+
+            .timeline {
+                padding-left: 1.5rem;
+            }
+
+            .tl-dot {
+                left: -1.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-logo">
+            <img src="assets/logo.png" alt="BASE logo">
+            <span>BASE <em>Automation</em></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html#services">Services</a></li>
+            <li><a href="index.html#portfolio">Portfolio</a></li>
+            <li><a href="index.html#experience">Experience</a></li>
+            <li><a href="index.html#skills">Skills</a></li>
+        </ul>
+        <a href="index.html#contact" class="nav-cta">Contact Me</a>
+    </nav>
+    <main style="padding-top: 100px; padding-bottom: 50px; min-height: calc(100vh - 100px);">
+        <div class="container" style="max-width: 800px; margin: 0 auto; padding: 20px;">
+            <a href="index.html#portfolio" style="color: var(--emerald); text-decoration: none; display: inline-block; margin-bottom: 30px; font-weight: 500;">
+                <i class="fas fa-arrow-left"></i> Back to Portfolio
+            </a>
+            <div class="portfolio-content" style="background: var(--bg2); padding: 40px; border-radius: 12px; border: 1px solid var(--border);">
+                <h1 style="margin-bottom: 1rem; color: var(--emerald);">Hệ Thống TikTok Automation (PhoneFarm Architecture)</h1>
+<p style="margin-bottom: 1rem; line-height: 1.7; color: var(--muted);"><em>Dự án Portfolio - Vị trí: Marketing AI Automation Specialist</em></p>
+<h2 style="margin-top: 2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">1. Tổng Quan Dự Án</h2>
+<p style="margin-bottom: 1rem; line-height: 1.7; color: var(--muted);">Hệ thống <strong>TikTok Automation</strong> là một giải pháp tự động hóa toàn diện được thiết kế để quản lý và vận hành hàng loạt tài khoản TikTok trên nền tảng thiết bị di động vật lý. Bằng việc ứng dụng các thuật toán giả lập hành vi người dùng và giao thức điều khiển thiết bị cấp thấp, hệ thống giải quyết bài toán phân phối nội dung, xây dựng độ uy tín (trust) cho tài khoản và thực hiện các chiến dịch truyền thông (seeding) ở quy mô công nghiệp mà không phụ thuộc vào thao tác thủ công.</p>
+<hr style="border: none; border-top: 1px solid var(--border); margin: 2rem 0;">
+<h2 style="margin-top: 2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">2. Kiến Trúc Kỹ Thuật & Các Tính Năng Cốt Lõi</h2>
+<h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; color: #38bdf8;">2.1. Quản Trị Hệ Thống Đa Thiết Bị (Multi-Device Management)</h3>
+<ul style="margin-left: 1.5rem; margin-bottom: 1rem; line-height: 1.7; color: var(--muted);">
+<li style="margin-bottom: 0.5rem;">Thiết lập kết nối trực tiếp và điều khiển đồng thời hàng loạt điện thoại Android vật lý thông qua giao thức ADB (Android Debug Bridge).</li>
+<li style="margin-bottom: 0.5rem;">Giám sát trạng thái thiết bị theo thời gian thực (ví dụ: đang chờ, đang thực thi kịch bản, mất kết nối mạng).</li>
+<li style="margin-bottom: 0.5rem;">Tự động khắc phục sự cố cấp thiết bị: Khởi động lại ứng dụng, đặt lại cấu hình mạng khi phát hiện gián đoạn kết nối.</li>
+</ul>
+<h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; color: #38bdf8;">2.2. Quản Lý Dữ Liệu Tài Khoản Tập Trung (Centralized Account Management)</h3>
+<ul style="margin-left: 1.5rem; margin-bottom: 1rem; line-height: 1.7; color: var(--muted);">
+<li style="margin-bottom: 0.5rem;">Hệ thống hóa hàng nghìn tài khoản TikTok nội bộ (Internal) và tài nguyên thuê ngoài (External). Quản lý chi tiết các siêu dữ liệu: Tên đăng nhập, Mật khẩu, Email, Trạng thái hoạt động (Live, Suspended, Banned).</li>
+<li style="margin-bottom: 0.5rem;">Cơ chế <strong>Auto-Refill & Binding</strong>: Tự động rà soát các thiết bị trống và phân bổ tài khoản mới từ cơ sở dữ liệu.</li>
+<li style="margin-bottom: 0.5rem;">Xử lý ngoại lệ thông minh: Khi phát hiện tài khoản bị vô hiệu hóa, hệ thống tự động ngắt kết nối, xóa dữ liệu ứng dụng (clear cache/data) và tái cấu trúc định danh thiết bị trước khi đăng nhập tài khoản thay thế.</li>
+</ul>
+<h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; color: #38bdf8;">2.3. Tự Động Hóa Hành Vi Người Dùng (Human-like Automation Logic)</h3>
+<p style="margin-bottom: 1rem; line-height: 1.7; color: var(--muted);">Sử dụng công nghệ UIAutomator2 kết hợp thuật toán ngẫu nhiên hóa để mô phỏng chính xác hành vi người thật, giảm thiểu rủi ro bị hệ thống chống bot của TikTok phát hiện:</p>
+<ul style="margin-left: 1.5rem; margin-bottom: 1rem; line-height: 1.7; color: var(--muted);">
+<li style="margin-bottom: 0.5rem;"><strong>Kịch bản Nurture (Nuôi tài khoản):</strong> Tự động điều hướng các trang For You, Following, và Search. Thiết lập thời lượng xem video ngẫu nhiên (watch time), thực hiện tương tác (like, lưu trữ) và bình luận dựa trên thư viện nội dung được phân tích ngữ cảnh.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Kịch bản Seeding (Tăng tương tác):</strong> Truy xuất video mục tiêu thông qua liên kết (URL) hoặc ID, tự động điều hướng luồng xem và thực hiện bình luận có chủ đích để hỗ trợ chiến dịch truyền thông.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Auto Upload (Xuất bản nội dung tự động):</strong> Quản lý luồng chuyển tệp từ máy chủ lưu trữ cục bộ sang thiết bị, tự động khởi tạo bài đăng mới, điền nội dung văn bản (caption), hashtag, nhắc tên (mention) và tiến hành xuất bản theo hàng đợi.</li>
+</ul>
+<h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; color: #38bdf8;">2.4. Vượt Cơ Chế Bảo Mật Tự Động (Auto-Bypass & Captcha Solving)</h3>
+<ul style="margin-left: 1.5rem; margin-bottom: 1rem; line-height: 1.7; color: var(--muted);">
+<li style="margin-bottom: 0.5rem;">Tích hợp các thuật toán xử lý hình ảnh nâng cao nhằm tự động phân tích và giải quyết các bài toán Captcha của TikTok (như Slider, Puzzle, xoay hình ảnh).</li>
+<li style="margin-bottom: 0.5rem;">Giao tiếp trực tiếp với máy chủ Email qua giao thức IMAP để trích xuất mã xác thực một lần (OTP), hoàn thiện quy trình đăng nhập và đăng ký mà không cần sự can thiệp của con người.</li>
+</ul>
+<h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; color: #38bdf8;">2.5. Hệ Thống Điều Phối Kịch Bản (Task Scheduler & Workflow)</h3>
+<ul style="margin-left: 1.5rem; margin-bottom: 1rem; line-height: 1.7; color: var(--muted);">
+<li style="margin-bottom: 0.5rem;">Cho phép quản trị viên lên lịch thực thi kịch bản chi tiết cho từng nhóm thiết bị vào các khung giờ tối ưu (Prime time) thông qua dữ liệu cấu trúc (CSV/Excel).</li>
+<li style="margin-bottom: 0.5rem;">Tích hợp logic luân chuyển công việc: Tự động đánh giá trạng thái hiện tại của thiết bị và tài khoản trước khi cấp phát nhiệm vụ, đảm bảo tỷ lệ hoàn thành cao nhất.</li>
+</ul>
+<h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; color: #38bdf8;">2.6. Chống Phát Hiện & Bảo Vệ Định Danh (Anti-Detect & Identity Protection)</h3>
+<ul style="margin-left: 1.5rem; margin-bottom: 1rem; line-height: 1.7; color: var(--muted);">
+<li style="margin-bottom: 0.5rem;">Can thiệp ở cấp độ hệ thống Android: Tự động từ chối các quyền truy cập dữ liệu nhạy cảm (Vị trí, Danh bạ).</li>
+<li style="margin-bottom: 0.5rem;">Tự động thay đổi chỉ số định danh phần cứng (`android_id`) để che giấu dấu vết liên kết giữa các tài khoản.</li>
+</ul>
+<h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; color: #38bdf8;">2.7. Ghi Nhận Dữ Liệu & Báo Cáo (Logging & Analytics)</h3>
+<ul style="margin-left: 1.5rem; margin-bottom: 1rem; line-height: 1.7; color: var(--muted);">
+<li style="margin-bottom: 0.5rem;">Giao diện người dùng (GUI) xây dựng trên nền tảng PyQt6, cung cấp bảng điều khiển trực quan (Dashboard) hiển thị tiến độ công việc và trạng thái tổng quan.</li>
+<li style="margin-bottom: 0.5rem;">Ghi nhật ký hệ thống (System logs) chi tiết ở từng bước thực thi. Tự động tổng hợp và kết xuất báo cáo hiệu suất chiến dịch, số lượng video đã xuất bản và sức khỏe tài khoản ra các định dạng chuẩn (Excel/CSV).</li>
+</ul>
+<hr style="border: none; border-top: 1px solid var(--border); margin: 2rem 0;">
+<h2 style="margin-top: 2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">3. Nền Tảng Công Nghệ (Tech Stack)</h2>
+<ul style="margin-left: 1.5rem; margin-bottom: 1rem; line-height: 1.7; color: var(--muted);">
+<li style="margin-bottom: 0.5rem;"><strong>Ngôn ngữ phát triển:</strong> Python 3</li>
+<li style="margin-bottom: 0.5rem;"><strong>Giao diện người dùng:</strong> PyQt6</li>
+<li style="margin-bottom: 0.5rem;"><strong>Giao thức & Thư viện tự động hóa:</strong> UIAutomator2, ADB (Android Debug Bridge)</li>
+<li style="margin-bottom: 0.5rem;"><strong>Xử lý đồ họa & Captcha:</strong> OpenCV, PIL, API giải mã Captcha</li>
+<li style="margin-bottom: 0.5rem;"><strong>Quản lý đa luồng & Đồng bộ:</strong> Threading, Tích hợp cơ chế khóa (Locks)</li>
+<li style="margin-bottom: 0.5rem;"><strong>Kiến trúc dữ liệu:</strong> JSON, CSV, Openpyxl</li>
+</ul>
+<hr style="border: none; border-top: 1px solid var(--border); margin: 2rem 0;">
+<h2 style="margin-top: 2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">4. Giá Trị Kinh Doanh & Hiệu Quả Hoạt Động (Business Impact)</h2>
+<ul style="margin-left: 1.5rem; margin-bottom: 1rem; line-height: 1.7; color: var(--muted);">
+<li style="margin-bottom: 0.5rem;"><strong>Tối ưu hóa nguồn lực:</strong> Cắt giảm đến 90% chi phí nhân sự vận hành tài khoản và phân phối nội dung.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Mở rộng quy mô truyền thông:</strong> Cho phép xuất bản hàng trăm video ngắn (Short-form video) mỗi ngày một cách có hệ thống, tối ưu hóa chi phí tiếp cận khách hàng tự nhiên (Organic Traffic).</li>
+<li style="margin-bottom: 0.5rem;"><strong>Kiểm soát rủi ro:</strong> Giảm thiểu tỷ lệ tài khoản bị khóa nhờ cơ chế nuôi dưỡng tự nhiên và bảo mật định danh thiết bị nâng cao.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Hỗ trợ chiến lược Marketing:</strong> Xây dựng cơ sở dữ liệu tài khoản uy tín để triển khai các chiến dịch Seeding diện rộng, tạo hiệu ứng đám đông và tăng cường độ phủ sóng thương hiệu trên nền tảng TikTok.</li>
+</ul>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>© 2026 BASE Automation Solution · Built by Nguyen Huy Binh</p>
+    </footer>
+
+    <script>
+        // Fade-in on scroll
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach((e, i) => {
+                if (e.isIntersecting) {
+                    setTimeout(() => e.target.classList.add('visible'), i * 60);
+                    observer.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // Navbar scroll effect
+        const nav = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            nav.style.background = window.scrollY > 40
+                ? 'rgba(8,15,12,0.97)'
+                : 'rgba(8,15,12,0.85)';
+        });
+    </script>
+</body>
+
+</html>

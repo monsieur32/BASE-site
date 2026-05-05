@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BASE Automation | Nguyen Huy Binh — Automation Solution Engineer</title>
+    <meta name="description"
+        content="BASE Automation — Building intelligent workflow automation, production scheduling DSS, and data pipelines for SMEs. Founded by Nguyen Huy Binh.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --emerald: #10b981;
+            --emerald-dark: #059669;
+            --emerald-glow: rgba(16, 185, 129, 0.15);
+            --bg: #080f0c;
+            --bg2: #0d1a14;
+            --bg3: #111f17;
+            --card: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #e2e8f0;
+            --muted: #64748b;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* ── SCROLLBAR ── */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--emerald-dark);
+            border-radius: 3px;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 0 2rem;
+            background: rgba(8, 15, 12, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            transition: background 0.3s;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-logo img {
+            height: 38px;
+            width: auto;
+        }
+
+        .nav-logo span {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .nav-logo span em {
+            color: var(--emerald);
+            font-style: normal;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .nav-cta {
+            background: var(--emerald);
+            color: #000;
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .nav-cta:hover {
+            background: var(--emerald-dark);
+            transform: translateY(-1px);
+        }
+
+        /* ── HERO ── */
+        #hero {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 100px 2rem 4rem;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 70% 60% at 60% 40%, rgba(16, 185, 129, 0.12) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 40% at 20% 80%, rgba(14, 165, 233, 0.08) 0%, transparent 60%),
+                linear-gradient(180deg, #080f0c 0%, #0d1a14 100%);
+        }
+
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(16, 185, 129, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 860px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--emerald-glow);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--emerald);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .hero-badge span {
+            width: 6px;
+            height: 6px;
+            background: var(--emerald);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1)
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(1.4)
+            }
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--white);
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-content h1 .grad {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: 1.125rem;
+            color: var(--muted);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--emerald);
+            color: #000;
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            background: var(--emerald-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-ghost {
+            background: var(--card);
+            color: var(--white);
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--white);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .stat-num span {
+            color: var(--emerald);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        /* ── SECTIONS ── */
+        section {
+            padding: 6rem 2rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--emerald);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 3vw, 2.5rem);
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .section-sub {
+            color: var(--muted);
+            font-size: 1rem;
+            max-width: 560px;
+            line-height: 1.7;
+        }
+
+        /* ── SERVICES ── */
+        #services {
+            background: var(--bg2);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .service-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .service-card:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            background: rgba(16, 185, 129, 0.06);
+            transform: translateY(-4px);
+        }
+
+        .svc-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--emerald-glow);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--emerald);
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 0.625rem;
+        }
+
+        .service-card p {
+            font-size: 0.875rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* ── PORTFOLIO ── */
+        #portfolio {
+            background: var(--bg);
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            border-color: rgba(16, 185, 129, 0.35);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(16, 185, 129, 0.1);
+        }
+
+        .project-banner {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner-1 {
+            background: linear-gradient(135deg, #0f2d1e 0%, #0d3326 100%);
+        }
+
+        .banner-2 {
+            background: linear-gradient(135deg, #0f1f2d 0%, #0d2633 100%);
+        }
+
+        .banner-3 {
+            background: linear-gradient(135deg, #2d1f0f 0%, #33260d 100%);
+        }
+
+        .banner-4 {
+            background: linear-gradient(135deg, #1f0f2d 0%, #260d33 100%);
+        }
+
+        .project-banner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.015) 0px, rgba(255, 255, 255, 0.015) 1px, transparent 1px, transparent 12px);
+        }
+
+        .project-banner i {
+            position: relative;
+            z-index: 1;
+        }
+
+        .project-body {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .project-year {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .project-type {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--emerald);
+            background: var(--emerald-glow);
+            padding: 3px 10px;
+            border-radius: 50px;
+        }
+
+        .project-body h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.625rem;
+        }
+
+        .project-body p {
+            font-size: 0.875rem;
+            color: var(--muted);
+            line-height: 1.65;
+            flex: 1;
+        }
+
+        .project-highlights {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .highlight {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .highlight i {
+            color: var(--emerald);
+            margin-top: 2px;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 1.25rem;
+        }
+
+        .tag {
+            font-size: 0.72rem;
+            font-weight: 500;
+            padding: 3px 10px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: #94a3b8;
+        }
+
+        /* ── EXPERIENCE ── */
+        #experience {
+            background: var(--bg2);
+        }
+
+        .timeline {
+            margin-top: 3rem;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--emerald) 0%, transparent 100%);
+            border-radius: 2px;
+        }
+
+        .tl-item {
+            position: relative;
+            padding-bottom: 3rem;
+        }
+
+        .tl-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .tl-dot {
+            position: absolute;
+            left: -2.45rem;
+            top: 4px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--emerald);
+            border: 3px solid var(--bg2);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+        }
+
+        .tl-date {
+            font-size: 0.78rem;
+            color: var(--emerald);
+            font-weight: 600;
+            margin-bottom: 0.375rem;
+            letter-spacing: 0.04em;
+        }
+
+        .tl-company {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .tl-role {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.75rem;
+        }
+
+        .tl-desc {
+            font-size: 0.875rem;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        .tl-result {
+            margin-top: 0.875rem;
+            padding: 0.75rem 1rem;
+            background: var(--emerald-glow);
+            border-left: 3px solid var(--emerald);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.8rem;
+            color: #a7f3d0;
+        }
+
+        .tl-result strong {
+            color: var(--emerald);
+        }
+
+        /* ── SKILLS ── */
+        #skills {
+            background: var(--bg);
+        }
+
+        .skills-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .skill-group h4 {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--emerald);
+            margin-bottom: 1rem;
+        }
+
+        .skill-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: #cbd5e1;
+            transition: all 0.2s;
+        }
+
+        .pill:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            color: var(--white);
+            background: rgba(16, 185, 129, 0.08);
+        }
+
+        .pill i {
+            color: var(--emerald);
+            font-size: 0.75rem;
+        }
+
+        /* ── CONTACT ── */
+        #contact {
+            background: var(--bg2);
+            text-align: center;
+        }
+
+        .contact-card {
+            max-width: 640px;
+            margin: 2.5rem auto 0;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .contact-link:hover {
+            border-color: var(--emerald);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .contact-link i {
+            color: var(--emerald);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        /* ── FADE IN ── */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media(max-width:768px) {
+            nav {
+                padding: 0 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+            }
+
+            .stat-num {
+                font-size: 1.5rem;
+            }
+
+            section {
+                padding: 4rem 1.25rem;
+            }
+
+            .timeline {
+                padding-left: 1.5rem;
+            }
+
+            .tl-dot {
+                left: -1.95rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav id="navbar">
+        <div class="nav-logo">
+            <img src="assets/logo.png" alt="BASE logo">
+            <span>BASE <em>Automation</em></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#services">Services</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#skills">Skills</a></li>
+        </ul>
+        <a href="#contact" class="nav-cta">Contact Me</a>
+    </nav>
+
+    <!-- HERO -->
+    <section id="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        <div class="hero-content fade-up">
+            <div class="hero-badge"><span></span> Open to opportunities</div>
+            <h1>Automation Solution<br><span class="grad">Engineer & Builder</span></h1>
+            <p class="hero-sub">I build intelligent workflow automation, decision-support systems, and data pipelines
+                that eliminate manual bottlenecks for SMEs — from idea to production.</p>
+            <div class="hero-actions">
+                <a href="#portfolio" class="btn-primary"><i class="fas fa-rocket"></i> View My Work</a>
+                <a href="#contact" class="btn-ghost"><i class="fas fa-paper-plane"></i> Get In Touch</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-num">3<span>+</span></div>
+                    <div class="stat-label">Years Building</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">100<span>%</span></div>
+                    <div class="stat-label">Data Integrity @ PNJ</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">5<span>+</span></div>
+                    <div class="stat-label">Shipped Projects</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services">
+        <div class="container">
+            <p class="section-label fade-up">What I Do</p>
+            <h2 class="section-title fade-up">End-to-End Automation<br>for Real Business Problems</h2>
+            <p class="section-sub fade-up">From workflow orchestration to AI-powered scheduling — I architect solutions
+                that actually ship.</p>
+            <div class="services-grid">
+                <div class="service-card fade-up">
+                    <div class="svc-icon"><i class="fas fa-sitemap"></i></div>
+                    <h3>Workflow Automation</h3>
+                    <p>Design and implement automated approval flows, cross-department data sync, and real-time alerting
+                        using n8n, Power Automate & Kestra.</p>
+                </div>
+                <div class="service-card fade-up">
+                    <div class="svc-icon"><i class="fas fa-brain"></i></div>
+                    <h3>Decision Support Systems</h3>
+                    <p>Build production scheduling DSS with optimization algorithms (GA, VNS) — turning manual planning
+                        chaos into data-driven operations.</p>
+                </div>
+                <div class="service-card fade-up">
+                    <div class="svc-icon"><i class="fas fa-spider"></i></div>
+                    <h3>Data Pipeline & Scraping</h3>
+                    <p>Aggregate, clean, and standardize large-scale datasets from web sources using Python, n8n
+                        webhooks and multi-threaded pipelines.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- PORTFOLIO -->
+    <section id="portfolio">
+        <div class="container">
+            <p class="section-label fade-up">Selected Work</p>
+            <h2 class="section-title fade-up">Projects That Shipped</h2>
+            <p class="section-sub fade-up">Real automation solutions built for real operational challenges.</p>
+            <div class="portfolio-grid">
+
+                <!-- Project 1: BASE Automation DSS -->
+                <div class="project-card fade-up" onclick="window.location.href='mes-portfolio.html'" style="cursor: pointer;" title="Click to view portfolio">
+                    <div class="project-banner banner-1">
+                        <i class="fas fa-calendar-check" style="color:#10b981;"></i>
+                    </div>
+                    <div class="project-body">
+                        <div class="project-meta">
+                            <span class="project-year">Mar 2023 – Present</span>
+                            <span class="project-type">Flagship</span>
+                        </div>
+                        <h3>BASE Automation — Production Scheduling DSS</h3>
+                        <p>A commercialized Decision Support System for SME production scheduling. Replaced 100% manual
+                            planning with an automated engine, delivering real-time operational insights.</p>
+                        <div class="project-highlights">
+                            <div class="highlight"><i class="fas fa-circle-check"></i> GA-VNS optimization engine for
+                                multi-machine scheduling</div>
+                            <div class="highlight"><i class="fas fa-circle-check"></i> Gantt chart visualization with
+                                real-time Gantt updates</div>
+                            <div class="highlight"><i class="fas fa-circle-check"></i> FastAPI backend + React frontend,
+                                deployed for clients</div>
+                        </div>
+                        <div class="project-tags">
+                            <span class="tag">Python</span><span class="tag">FastAPI</span><span
+                                class="tag">React</span>
+                            <span class="tag">n8n</span><span class="tag">SQLite</span><span class="tag">OR-Tools</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2: Social Media Framework -->
+                <div class="project-card fade-up" onclick="window.location.href='tiktok-portfolio.html'" style="cursor: pointer;" title="Click to view portfolio">
+                    <div class="project-banner banner-2">
+                        <i class="fas fa-share-nodes" style="color:#38bdf8;"></i>
+                    </div>
+                    <div class="project-body">
+                        <div class="project-meta">
+                            <span class="project-year">2024</span>
+                            <span class="project-type">Automation</span>
+                        </div>
+                        <h3>Social Media Management Framework</h3>
+                        <p>High-performance automation suite to manage complex multi-platform social workflows at scale,
+                            with concurrent execution and robust data storage.</p>
+                        <div class="project-highlights">
+                            <div class="highlight"><i class="fas fa-circle-check"></i> Multi-threading for concurrent
+                                task execution across platforms</div>
+                            <div class="highlight"><i class="fas fa-circle-check"></i> Kestra platform for workflow
+                                orchestration & scheduling</div>
+                            <div class="highlight"><i class="fas fa-circle-check"></i> Optimized MySQL integration for
+                                high-frequency data ops</div>
+                        </div>
+                        <div class="project-tags">
+                            <span class="tag">Python</span><span class="tag">Selenium</span><span
+                                class="tag">Kestra</span>
+                            <span class="tag">Multi-threading</span><span class="tag">MySQL</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3: Real Estate Intelligence -->
+                <div class="project-card fade-up" onclick="window.location.href='realestate-portfolio.html'" style="cursor: pointer;" title="Click to view portfolio">
+                    <div class="project-banner banner-3">
+                        <i class="fas fa-building-columns" style="color:#f59e0b;"></i>
+                    </div>
+                    <div class="project-body">
+                        <div class="project-meta">
+                            <span class="project-year">2024</span>
+                            <span class="project-type">Data Pipeline</span>
+                        </div>
+                        <h3>Real Estate Data Intelligence System</h3>
+                        <p>Robust web scraping pipeline that aggregates and standardizes millions of property records to
+                            directly support market analysis and investment decisions.</p>
+                        <div class="project-highlights">
+                            <div class="highlight"><i class="fas fa-circle-check"></i> Aggregated millions of property
+                                records from multiple sources</div>
+                            <div class="highlight"><i class="fas fa-circle-check"></i> Data validation logic ensuring
+                                integrity pre-storage</div>
+                            <div class="highlight"><i class="fas fa-circle-check"></i> n8n webhooks for automated
+                                pipeline triggers</div>
+                        </div>
+                        <div class="project-tags">
+                            <span class="tag">Python</span><span class="tag">n8n</span><span class="tag">Webhooks</span>
+                            <span class="tag">PostgreSQL</span><span class="tag">Web Scraping</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4: KYC Automation -->
+                <div class="project-card fade-up">
+                    <div class="project-banner banner-4">
+                        <i class="fas fa-shield-halved" style="color:#a78bfa;"></i>
+                    </div>
+                    <div class="project-body">
+                        <div class="project-meta">
+                            <span class="project-year">2024</span>
+                            <span class="project-type">Bot / RPA</span>
+                        </div>
+                        <h3>Automated Identity Verification (KYC) Tool</h3>
+                        <p>End-to-end RPA tool for account registration and identity verification workflows, handling
+                            anti-bot measures and delivering real-time status notifications.</p>
+                        <div class="project-highlights">
+                            <div class="highlight"><i class="fas fa-circle-check"></i> Integrated Captcha-solving for
+                                uninterrupted automation</div>
+                            <div class="highlight"><i class="fas fa-circle-check"></i> Real-time Telegram API push
+                                notifications on completion</div>
+                            <div class="highlight"><i class="fas fa-circle-check"></i> End-to-end flow from registration
+                                to verification</div>
+                        </div>
+                        <div class="project-tags">
+                            <span class="tag">Python</span><span class="tag">Selenium</span><span class="tag">Telegram
+                                API</span>
+                            <span class="tag">Captcha Bypass</span><span class="tag">RPA</span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience">
+        <div class="container">
+            <p class="section-label fade-up">Career</p>
+            <h2 class="section-title fade-up">Experience</h2>
+            <div class="timeline">
+                <div class="tl-item fade-up">
+                    <div class="tl-dot"></div>
+                    <div class="tl-date">June 2025 — September 2025</div>
+                    <div class="tl-company">PNJ – Phu Nhuan Jewelry JSC</div>
+                    <div class="tl-role">Lowcode Intern — Application Development & Operations</div>
+                    <div class="tl-desc">Collaborated with a 4-member team to orchestrate complex business flows using
+                        Power Automate and the Power Platform suite. Built and maintained backend logic for a
+                        high-stakes 360° internal evaluation system. Conducted rigorous testing and data validation to
+                        ensure integrity of reports going to C-level leadership.</div>
+                    <div class="tl-result"><strong>Outcome:</strong> Final reports delivered with 100% data integrity
+                        directly to C-level executives.</div>
+                </div>
+                <div class="tl-item fade-up">
+                    <div class="tl-dot"></div>
+                    <div class="tl-date">Mar 2023 — Present</div>
+                    <div class="tl-company">BASE Automation — Self-Founded</div>
+                    <div class="tl-role"> Automation Engineer</div>
+                    <div class="tl-desc">Identified SME clients with operational bottlenecks caused by manual production
+                        scheduling and unstructured data handling. Designed and deployed a Decision Support System (DSS)
+                        using n8n, Python, and optimization algorithms to automate complex operational planning
+                        end-to-end.</div>
+                    <div class="tl-result"><strong>Outcome:</strong> Commercialized solutions deployed — reduced manual
+                        intervention and provided clients with real-time, data-driven operational insights.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+        <div class="container">
+            <p class="section-label fade-up">Tech Stack</p>
+            <h2 class="section-title fade-up">Skills & Tools</h2>
+            <div class="skills-wrapper">
+                <div class="skill-group fade-up">
+                    <h4><i class="fas fa-code"></i> &nbsp;Programming</h4>
+                    <div class="skill-pills">
+                        <span class="pill"><i class="fab fa-python"></i> Python</span>
+                        <span class="pill"><i class="fab fa-java"></i> Java (OOP)</span>
+                    </div>
+                </div>
+                <div class="skill-group fade-up">
+                    <h4><i class="fas fa-diagram-project"></i> &nbsp;Low-Code & Workflow</h4>
+                    <div class="skill-pills">
+                        <span class="pill"><i class="fas fa-bolt"></i> n8n</span>
+                        <span class="pill"><i class="fas fa-bolt"></i> Kestra</span>
+                        <span class="pill"><i class="fab fa-microsoft"></i> Power Automate</span>
+                        <span class="pill"><i class="fab fa-microsoft"></i> Power Platform</span>
+                    </div>
+                </div>
+                <div class="skill-group fade-up">
+                    <h4><i class="fas fa-robot"></i> &nbsp;Automation & Testing</h4>
+                    <div class="skill-pills">
+                        <span class="pill"><i class="fas fa-globe"></i> Selenium WebDriver</span>
+                        <span class="pill"><i class="fas fa-mobile-alt"></i> Appium</span>
+                        <span class="pill"><i class="fas fa-terminal"></i> ADB</span>
+                    </div>
+                </div>
+                <div class="skill-group fade-up">
+                    <h4><i class="fas fa-database"></i> &nbsp;Databases & Cloud</h4>
+                    <div class="skill-pills">
+                        <span class="pill"><i class="fas fa-database"></i> PostgreSQL</span>
+                        <span class="pill"><i class="fas fa-database"></i> MySQL</span>
+                        <span class="pill"><i class="fab fa-aws"></i> AWS S3</span>
+                    </div>
+                </div>
+                <div class="skill-group fade-up">
+                    <h4><i class="fas fa-tools"></i> &nbsp;Dev Tools</h4>
+                    <div class="skill-pills">
+                        <span class="pill"><i class="fab fa-git-alt"></i> Git</span>
+                        <span class="pill"><i class="fab fa-atlassian"></i> Jira</span>
+                    </div>
+                </div>
+                <div class="skill-group fade-up">
+                    <h4><i class="fas fa-certificate"></i> &nbsp;Certifications</h4>
+                    <div class="skill-pills">
+                        <span class="pill"><i class="fas fa-language"></i> Cambridge B1 English</span>
+                        <span class="pill"><i class="fas fa-fire"></i> BigData Hadoop/Spark</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+        <div class="container">
+            <p class="section-label fade-up">Let's Connect</p>
+            <h2 class="section-title fade-up">Ready to Automate<br>Your Business?</h2>
+            <p class="section-sub fade-up" style="margin:0 auto;">Have an operational challenge that could be automated?
+                Let's talk about how to solve it.</p>
+            <div class="contact-card fade-up">
+                <p style="font-size:0.9rem;color:var(--muted);margin-bottom:0.5rem;">Nguyen Huy Binh — Automation
+                    Solution Engineer</p>
+                <div class="contact-links">
+                    <a href="tel:+84939871834" class="contact-link" id="link-phone">
+                        <i class="fas fa-phone"></i> +84 939 871 834
+                    </a>
+                    <a href="mailto:32nguyenhuybinh@gmail.com" class="contact-link" id="link-email">
+                        <i class="fas fa-envelope"></i> 32nguyenhuybinh@gmail.com
+                    </a>
+                    <a href="https://github.com/monsieur32" class="contact-link" id="link-github" target="_blank">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 BASE Automation Solution · Built by Nguyen Huy Binh</p>
+    </footer>
+
+    <script>
+        // Fade-in on scroll
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach((e, i) => {
+                if (e.isIntersecting) {
+                    setTimeout(() => e.target.classList.add('visible'), i * 60);
+                    observer.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // Navbar scroll effect
+        const nav = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            nav.style.background = window.scrollY > 40
+                ? 'rgba(8,15,12,0.97)'
+                : 'rgba(8,15,12,0.85)';
+        });
+    </script>
+</body>
+
+</html>

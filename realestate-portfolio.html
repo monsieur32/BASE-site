@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate n8n Pipeline | BASE Automation | Nguyen Huy Binh — Automation Solution Engineer</title>
+    <meta name="description"
+        content="BASE Automation — Building intelligent workflow automation, production scheduling DSS, and data pipelines for SMEs. Founded by Nguyen Huy Binh.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --emerald: #10b981;
+            --emerald-dark: #059669;
+            --emerald-glow: rgba(16, 185, 129, 0.15);
+            --bg: #080f0c;
+            --bg2: #0d1a14;
+            --bg3: #111f17;
+            --card: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #e2e8f0;
+            --muted: #64748b;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* ── SCROLLBAR ── */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--emerald-dark);
+            border-radius: 3px;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 0 2rem;
+            background: rgba(8, 15, 12, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            transition: background 0.3s;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-logo img {
+            height: 38px;
+            width: auto;
+        }
+
+        .nav-logo span {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .nav-logo span em {
+            color: var(--emerald);
+            font-style: normal;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .nav-cta {
+            background: var(--emerald);
+            color: #000;
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .nav-cta:hover {
+            background: var(--emerald-dark);
+            transform: translateY(-1px);
+        }
+
+        /* ── HERO ── */
+        #hero {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 100px 2rem 4rem;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 70% 60% at 60% 40%, rgba(16, 185, 129, 0.12) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 40% at 20% 80%, rgba(14, 165, 233, 0.08) 0%, transparent 60%),
+                linear-gradient(180deg, #080f0c 0%, #0d1a14 100%);
+        }
+
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(16, 185, 129, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 860px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--emerald-glow);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--emerald);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .hero-badge span {
+            width: 6px;
+            height: 6px;
+            background: var(--emerald);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1)
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(1.4)
+            }
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--white);
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-content h1 .grad {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: 1.125rem;
+            color: var(--muted);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--emerald);
+            color: #000;
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            background: var(--emerald-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-ghost {
+            background: var(--card);
+            color: var(--white);
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--white);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .stat-num span {
+            color: var(--emerald);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        /* ── SECTIONS ── */
+        section {
+            padding: 6rem 2rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--emerald);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 3vw, 2.5rem);
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .section-sub {
+            color: var(--muted);
+            font-size: 1rem;
+            max-width: 560px;
+            line-height: 1.7;
+        }
+
+        /* ── SERVICES ── */
+        #services {
+            background: var(--bg2);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .service-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .service-card:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            background: rgba(16, 185, 129, 0.06);
+            transform: translateY(-4px);
+        }
+
+        .svc-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--emerald-glow);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--emerald);
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 0.625rem;
+        }
+
+        .service-card p {
+            font-size: 0.875rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* ── PORTFOLIO ── */
+        #portfolio {
+            background: var(--bg);
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            border-color: rgba(16, 185, 129, 0.35);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(16, 185, 129, 0.1);
+        }
+
+        .project-banner {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner-1 {
+            background: linear-gradient(135deg, #0f2d1e 0%, #0d3326 100%);
+        }
+
+        .banner-2 {
+            background: linear-gradient(135deg, #0f1f2d 0%, #0d2633 100%);
+        }
+
+        .banner-3 {
+            background: linear-gradient(135deg, #2d1f0f 0%, #33260d 100%);
+        }
+
+        .banner-4 {
+            background: linear-gradient(135deg, #1f0f2d 0%, #260d33 100%);
+        }
+
+        .project-banner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.015) 0px, rgba(255, 255, 255, 0.015) 1px, transparent 1px, transparent 12px);
+        }
+
+        .project-banner i {
+            position: relative;
+            z-index: 1;
+        }
+
+        .project-body {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .project-year {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .project-type {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--emerald);
+            background: var(--emerald-glow);
+            padding: 3px 10px;
+            border-radius: 50px;
+        }
+
+        .project-body h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.625rem;
+        }
+
+        .project-body p {
+            font-size: 0.875rem;
+            color: var(--muted);
+            line-height: 1.65;
+            flex: 1;
+        }
+
+        .project-highlights {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .highlight {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .highlight i {
+            color: var(--emerald);
+            margin-top: 2px;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 1.25rem;
+        }
+
+        .tag {
+            font-size: 0.72rem;
+            font-weight: 500;
+            padding: 3px 10px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: #94a3b8;
+        }
+
+        /* ── EXPERIENCE ── */
+        #experience {
+            background: var(--bg2);
+        }
+
+        .timeline {
+            margin-top: 3rem;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--emerald) 0%, transparent 100%);
+            border-radius: 2px;
+        }
+
+        .tl-item {
+            position: relative;
+            padding-bottom: 3rem;
+        }
+
+        .tl-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .tl-dot {
+            position: absolute;
+            left: -2.45rem;
+            top: 4px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--emerald);
+            border: 3px solid var(--bg2);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+        }
+
+        .tl-date {
+            font-size: 0.78rem;
+            color: var(--emerald);
+            font-weight: 600;
+            margin-bottom: 0.375rem;
+            letter-spacing: 0.04em;
+        }
+
+        .tl-company {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .tl-role {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.75rem;
+        }
+
+        .tl-desc {
+            font-size: 0.875rem;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        .tl-result {
+            margin-top: 0.875rem;
+            padding: 0.75rem 1rem;
+            background: var(--emerald-glow);
+            border-left: 3px solid var(--emerald);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.8rem;
+            color: #a7f3d0;
+        }
+
+        .tl-result strong {
+            color: var(--emerald);
+        }
+
+        /* ── SKILLS ── */
+        #skills {
+            background: var(--bg);
+        }
+
+        .skills-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .skill-group h4 {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--emerald);
+            margin-bottom: 1rem;
+        }
+
+        .skill-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: #cbd5e1;
+            transition: all 0.2s;
+        }
+
+        .pill:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            color: var(--white);
+            background: rgba(16, 185, 129, 0.08);
+        }
+
+        .pill i {
+            color: var(--emerald);
+            font-size: 0.75rem;
+        }
+
+        /* ── CONTACT ── */
+        #contact {
+            background: var(--bg2);
+            text-align: center;
+        }
+
+        .contact-card {
+            max-width: 640px;
+            margin: 2.5rem auto 0;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .contact-link:hover {
+            border-color: var(--emerald);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .contact-link i {
+            color: var(--emerald);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        /* ── FADE IN ── */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media(max-width:768px) {
+            nav {
+                padding: 0 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+            }
+
+            .stat-num {
+                font-size: 1.5rem;
+            }
+
+            section {
+                padding: 4rem 1.25rem;
+            }
+
+            .timeline {
+                padding-left: 1.5rem;
+            }
+
+            .tl-dot {
+                left: -1.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-logo">
+            <img src="assets/logo.png" alt="BASE logo">
+            <span>BASE <em>Automation</em></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html#services">Services</a></li>
+            <li><a href="index.html#portfolio">Portfolio</a></li>
+            <li><a href="index.html#experience">Experience</a></li>
+            <li><a href="index.html#skills">Skills</a></li>
+        </ul>
+        <a href="index.html#contact" class="nav-cta">Contact Me</a>
+    </nav>
+    <main style="padding-top: 100px; padding-bottom: 50px; min-height: calc(100vh - 100px);">
+        <div class="container" style="max-width: 800px; margin: 0 auto; padding: 20px;">
+            <a href="index.html#portfolio" style="color: var(--emerald); text-decoration: none; display: inline-block; margin-bottom: 30px; font-weight: 500;">
+                <i class="fas fa-arrow-left"></i> Back to Portfolio
+            </a>
+            <div class="portfolio-content" style="background: var(--bg2); padding: 40px; border-radius: 12px; border: 1px solid var(--border);">
+                <h1 style="margin-bottom: 1rem; color: var(--emerald);">Hệ Thống Real Estate Photo → Instagram Pipeline (n8n Automation)</h1>
+<h2 style="margin-top: 2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">1. Tổng Quan Dự Án</h2>
+<p style="margin-bottom: 1rem; line-height: 1.7; color: var(--muted);">Hệ thống <strong>Real Estate Photo → Instagram Pipeline</strong> là một luồng tự động hóa (workflow) nâng cao được xây dựng trên nền tảng n8n. Dự án giúp các đại lý bất động sản và chuyên viên marketing tự động hóa toàn bộ quy trình sản xuất nội dung mạng xã hội (Instagram) từ những bức ảnh thô. Bằng việc kết hợp sức mạnh của AI phân tích hình ảnh (Google Gemini) và quy trình xét duyệt nội dung qua Telegram, hệ thống giúp tối ưu hóa thời gian và đảm bảo chất lượng bài đăng một cách chuyên nghiệp.</p>
+<hr style="border: none; border-top: 1px solid var(--border); margin: 2rem 0;">
+<h2 style="margin-top: 2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">2. Kiến Trúc Kỹ Thuật & Các Tính Năng Cốt Lõi</h2>
+<h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; color: #38bdf8;">2.1. Nhận Diện & Trích Xuất Dữ Liệu Tự Động (Automated Trigger & Fetching)</h3>
+<ul style="margin-left: 1.5rem; margin-bottom: 1rem; line-height: 1.7; color: var(--muted);">
+<li style="margin-bottom: 0.5rem;"><strong>Google Drive Integration:</strong> Hệ thống tự động lắng nghe (poll) sự kiện thư mục cụ thể trên Google Drive. Ngay khi có một bức ảnh bất động sản mới được tải lên, hệ thống sẽ kích hoạt luồng làm việc (trigger) và tải ảnh về để xử lý tiếp.</li>
+</ul>
+<h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; color: #38bdf8;">2.2. Phân Tích Hình Ảnh AI & Sáng Tạo Nội Dung (AI Vision & Content Generation)</h3>
+<ul style="margin-left: 1.5rem; margin-bottom: 1rem; line-height: 1.7; color: var(--muted);">
+<li style="margin-bottom: 0.5rem;">Sử dụng <strong>Google Gemini Vision</strong> thông qua LangChain Agent đóng vai trò như một chuyên gia marketing bất động sản.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Phân tích hình ảnh chuyên sâu:</strong> Nhận diện loại phòng, phong cách thiết kế, đặc điểm nổi bật, ánh sáng và không gian của bức ảnh.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Tạo Instagram Caption:</strong> Tự động soạn thảo nội dung (150-200 từ) chuẩn SEO cho Instagram, nêu bật các ưu điểm của bất động sản, kết hợp emoji chuyên nghiệp, lời kêu gọi hành động (Call-to-Action) và bộ 15-20 hashtag tối ưu.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Gợi ý thiết kế:</strong> Đề xuất phong cách thiết kế Canva (ví dụ: 'Modern Minimal', 'Luxury Gold') phù hợp với 'mood' của bức ảnh để phục vụ cho các bước thiết kế tiếp theo.</li>
+</ul>
+<h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; color: #38bdf8;">2.3. Xử Lý Dữ Liệu Phức Tạp (Data Parsing & Structuring)</h3>
+<ul style="margin-left: 1.5rem; margin-bottom: 1rem; line-height: 1.7; color: var(--muted);">
+<li style="margin-bottom: 0.5rem;">Sử dụng mã JavaScript tùy chỉnh (Code Node) để trích xuất, chuẩn hóa định dạng dữ liệu (JSON) trả về từ AI. Đảm bảo dữ liệu luôn ở trạng thái cấu trúc hoàn chỉnh trước khi chuyển sang các bước tiếp theo, đồng thời tích hợp cơ chế dự phòng (fallback) nếu AI gặp lỗi phản hồi.</li>
+</ul>
+<h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; color: #38bdf8;">2.4. Quy Trình Xét Duyệt Human-in-the-Loop (Approval Workflow)</h3>
+<ul style="margin-left: 1.5rem; margin-bottom: 1rem; line-height: 1.7; color: var(--muted);">
+<li style="margin-bottom: 0.5rem;"><strong>Telegram Bot Integration:</strong> Tự động gửi toàn bộ nội dung đã phân tích (thông tin phòng, phong cách, caption, đặc điểm nổi bật) kèm liên kết xem ảnh thô đến Telegram của người quản lý (Manager).</li>
+<li style="margin-bottom: 0.5rem;"><strong>Interactive Inline Keyboard:</strong> Tích hợp trực tiếp các nút bấm <strong>Approve</strong> (Duyệt) và <strong>Reject</strong> (Từ chối) ngay trong tin nhắn Telegram.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Webhook & Wait Node:</strong> Hệ thống tự động tạm dừng luồng làm việc, chờ phản hồi từ người quản lý thông qua Webhook, đảm bảo không có nội dung nào được xuất bản nếu chưa qua kiểm duyệt.</li>
+</ul>
+<h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; color: #38bdf8;">2.5. Điều Phối Kịch Bản Rẽ Nhánh (Conditional Logic & Notifications)</h3>
+<ul style="margin-left: 1.5rem; margin-bottom: 1rem; line-height: 1.7; color: var(--muted);">
+<li style="margin-bottom: 0.5rem;"><strong>Tự động hóa quyết định:</strong> Hệ thống đọc dữ liệu phản hồi (Callback Query) từ Telegram để phân nhánh quá trình xử lý.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Thông báo kết quả:</strong> Trả về thông báo thành công khi bài viết đã sẵn sàng lên sóng (Published), hoặc thông báo hủy bỏ luồng khi nội dung bị từ chối (Rejected).</li>
+</ul>
+<hr style="border: none; border-top: 1px solid var(--border); margin: 2rem 0;">
+<h2 style="margin-top: 2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">3. Giá Trị Kinh Doanh & Hiệu Quả Hoạt Động (Business Impact)</h2>
+<ul style="margin-left: 1.5rem; margin-bottom: 1rem; line-height: 1.7; color: var(--muted);">
+<li style="margin-bottom: 0.5rem;"><strong>Tối ưu hóa thời gian sản xuất nội dung:</strong> Loại bỏ hoàn toàn thao tác thủ công trong việc quan sát, đánh giá ảnh và viết caption cho bất động sản, tiết kiệm hàng giờ làm việc mỗi ngày.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Đảm bảo chất lượng & Tính nhất quán:</strong> Content được sản xuất bởi AI luôn bám sát văn phong marketing chuyên nghiệp, kèm hashtag tối ưu, giúp tăng mức độ tương tác tự nhiên (Organic Reach) trên nền tảng Instagram.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Kiểm soát rủi ro tuyệt đối:</strong> Cơ chế "Human-in-the-loop" qua Telegram giúp cấp quản lý dễ dàng kiểm duyệt và nắm bắt nội dung trước khi phát hành mọi lúc, mọi nơi chỉ với một thao tác chạm.</li>
+<li style="margin-bottom: 0.5rem;"><strong>Khả năng mở rộng cao:</strong> Luồng làm việc có thể dễ dàng được mở rộng và tích hợp thêm các công cụ như Canva (Tự động chèn ảnh vào template) và Instagram Graph API (Tự động đăng bài) để hoàn thiện quy trình End-to-End.</li>
+</ul>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>© 2026 BASE Automation Solution · Built by Nguyen Huy Binh</p>
+    </footer>
+
+    <script>
+        // Fade-in on scroll
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach((e, i) => {
+                if (e.isIntersecting) {
+                    setTimeout(() => e.target.classList.add('visible'), i * 60);
+                    observer.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // Navbar scroll effect
+        const nav = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            nav.style.background = window.scrollY > 40
+                ? 'rgba(8,15,12,0.97)'
+                : 'rgba(8,15,12,0.85)';
+        });
+    </script>
+</body>
+
+</html>
